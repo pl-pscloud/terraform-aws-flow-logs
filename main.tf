@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_group" "pscloud-cloudwatch-log-group" {
 }
 
 resource "aws_iam_role" "pscloud-iam-role-for-flow-log" {
-  name = "${var.pscloud_company}_iam_role_for_flow_log_${var.pscloud_env}_${var.pscloud_project}"
+  name = var.pscloud_vpc_id != null ? "${var.pscloud_company}_iam_role_for_flow_log_vpcId-${var.pscloud_vpc_id}_${var.pscloud_env}_${var.pscloud_project}" : "${var.pscloud_company}_iam_role_for_flow_log_subnetId-${var.pscloud_subnet_id}_${var.pscloud_env}_${var.pscloud_project}"
 
   assume_role_policy = <<EOF
 {
@@ -32,7 +32,7 @@ EOF
 
 resource "aws_iam_role_policy" "pscloud-iam-policy-for-cloudwatch-log" {
 
-  name = "${var.pscloud_company}_iam_role_policy_for_cloudwatch_log_${var.pscloud_env}_${var.pscloud_project}"
+  name = var.pscloud_vpc_id != null ? "${var.pscloud_company}_iam_role_policy_for_cloudwatch_log_vpcId-${var.pscloud_vpc_id}_${var.pscloud_env}_${var.pscloud_project}" : "${var.pscloud_company}_iam_role_policy_for_cloudwatch_log_subnetId-${var.pscloud_subnet_id}_${var.pscloud_env}_${var.pscloud_project}"
   role = aws_iam_role.pscloud-iam-role-for-flow-log.id
 
   policy = <<EOF
